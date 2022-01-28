@@ -1,46 +1,48 @@
 # Ordering System for Restaurants (OSR)
 
 This is an ordering System for restaurants. In this application you can:
-- Register new order by a post request `/api/order`. The payload will be:
+
+- Register new order by a POST request `/api/order`. The payload will be:
 
 ```javascript
 {
-  "id":"ABCD123456",
+  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454",
   "status":"Heard",
-  "amount":20.50
+  "paymentMethod":"paypal",
+  "amount":20.50,
+  "address":
+  {
+  	"address":"Av. Puerta de Hierro, s/n",
+  	"city":"Madrid",
+  	"postalCode":"28071"
+  }
   "orderItems" : [
   {
-    "meal":
-    {
-    	"id":""
-    	"description":"Tortilla de patata"
-    	"unitPrice":5
-    }
+    "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3452",
+    "description":"Tortilla de patata",
+    "unitPrice":5,
     "quantity": 2
   },
   {
-    "meal":
-    {
-    	"id":""
-    	"description":"Paella"
-    	"unitPrice":11.5
-    }
+    "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3453",
+    "description":"Paella",
+    "unitPrice":11.5,
     "quantity": 1
   }
   ]
 }
 ```
 
-- Update order status by a put request `/api/order`. They payload will be:
+- Update order status by a PUT request `/api/order`. They payload will be:
 
 ```javascript
 {
-  "id":"ABCD123456",
+  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454",
   "status":"Cooking"
 }
 ```
 
-- Check order status by a get request `/api/order`, passing de order id as a request parameter.
+- Check order status by a GET request `/api/order`, passing de order id as a request parameter.
 
 
 ### Business Logic
@@ -75,8 +77,9 @@ The normal sequence status is:
 
 #### TODO List
 
-- Create basic project structure :heavy_check_mark:
-- Implement Register new order :white_check_mark:
-- Implement Update order status :white_check_mark:
-- Implement Ckeck order status :white_check_mark:
-- Dockerization :white_check_mark:
+- Application definition :heavy_check_mark:
+- Create basic project structure: :x:
+- Implement Register new order :x:
+- Implement Update order status :x:
+- Implement Check order status :x:
+- Dockerization :x:
