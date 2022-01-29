@@ -19,13 +19,13 @@ This is an ordering System for restaurants. In this application you can:
   },
   "orderItems" : [
   {
-    "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3452",
+    "productId":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3452",
     "description":"Tortilla de patata",
     "unitPrice":5,
     "quantity": 2
   },
   {
-    "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3453",
+    "productId":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3453",
     "description":"Paella",
     "unitPrice":11.5,
     "quantity": 1
