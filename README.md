@@ -10,11 +10,12 @@ This is an ordering System for restaurants. In this application you can:
   "status":"Heard",
   "paymentMethod":"paypal",
   "amount":20.50,
+  "date":"28/01/2022 13:43",
   "address":
   {
   	"address":"Av. Puerta de Hierro, s/n",
   	"city":"Madrid",
-  	"postalCode":"28071"
+  	"zipCode":"28071"
   }
   "orderItems" : [
   {
