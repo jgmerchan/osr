@@ -16,7 +16,7 @@ This is an ordering System for restaurants. In this application you can:
   	"address":"Av. Puerta de Hierro, s/n",
   	"city":"Madrid",
   	"zipCode":"28071"
-  }
+  },
   "orderItems" : [
   {
     "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3452",
