@@ -6,11 +6,7 @@ This is an ordering System for restaurants. In this application you can:
 
 ```javascript
 {
-  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454",
-  "status":"Heard",
   "paymentMethod":"paypal",
-  "amount":20.50,
-  "date":"28/01/2022 13:43",
   "address":
   {
   	"address":"Av. Puerta de Hierro, s/n",
@@ -43,7 +39,37 @@ This is an ordering System for restaurants. In this application you can:
 }
 ```
 
-- Check order status by a GET request `/api/order`, passing de order id as a request parameter.
+- Check order status by a GET request `/api/order`, passing de order id as a request parameter. The response will be:
+
+```javascript
+{
+  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454",
+  "status":"Cooking",
+  "paymentMethod":"paypal",
+  "amount":20.50,
+  "date":"28/01/2022 13:43",
+  "address":
+  {
+  	"address":"Av. Puerta de Hierro, s/n",
+  	"city":"Madrid",
+  	"zipCode":"28071"
+  },
+  "orderItems" : [
+  {
+    "productId":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3452",
+    "description":"Tortilla de patata",
+    "unitPrice":5,
+    "quantity": 2
+  },
+  {
+    "productId":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3453",
+    "description":"Paella",
+    "unitPrice":11.5,
+    "quantity": 1
+  }
+  ]
+}
+```
 
 
 ### Business Logic
