@@ -1,4 +1,4 @@
-package com.osr.order.domain.service;
+package com.osr.order.domain.order.service;
 
 import java.util.List;
 import java.util.UUID;

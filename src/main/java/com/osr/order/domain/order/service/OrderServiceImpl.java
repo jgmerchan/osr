@@ -1,4 +1,4 @@
-package com.osr.order.domain.service;
+package com.osr.order.domain.order.service;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.osr.order.domain.order.Address;
 import com.osr.order.domain.order.Order;
 import com.osr.order.domain.order.OrderItem;
-import com.osr.order.domain.repository.OrderRepository;
+import com.osr.order.domain.order.repository.OrderRepository;
 
 import lombok.AllArgsConstructor;
 

@@ -25,7 +25,10 @@ import com.osr.order.domain.order.Address;
 import com.osr.order.domain.order.Money;
 import com.osr.order.domain.order.Order;
 import com.osr.order.domain.order.OrderItem;
-import com.osr.order.domain.repository.OrderRepository;
+import com.osr.order.domain.order.repository.OrderRepository;
+import com.osr.order.domain.order.service.OrderService;
+import com.osr.order.domain.order.service.OrderServiceException;
+import com.osr.order.domain.order.service.OrderServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {

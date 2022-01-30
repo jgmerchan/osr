@@ -1,4 +1,4 @@
-package com.osr.order.domain.service;
+package com.osr.order.domain.order.service;
 
 public class OrderServiceException extends RuntimeException {
 

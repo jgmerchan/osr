@@ -1,4 +1,4 @@
-package com.osr.order.domain.repository;
+package com.osr.order.domain.order.repository;
 
 import java.util.Optional;
 import java.util.UUID;
