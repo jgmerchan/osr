@@ -113,8 +113,12 @@ The normal sequence status is:
 
 - Application definition :heavy_check_mark:
 - Create basic project structure: :heavy_check_mark:
-- Implement Create new order :heavy_check_mark:
-- Implement Update order status :heavy_check_mark:
-- Implement Cancel order :X:
-- Implement Check order status :x:
+- Implement Create new order business logic :heavy_check_mark:
+- Implement Create new order api entrypoint :x:
+- Implement Update order status business logic :heavy_check_mark:
+- Implement Update order status api entrypoint :x:
+- Implement Cancel order business logic :heavy_check_mark:
+- Implement Cancel order api entrypoint :x:
+- Implement Check order status business logic :heavy_check_mark:
+- Implement Check order status api entrypoint :x:
 - Dockerization :x:
