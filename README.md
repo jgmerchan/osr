@@ -112,8 +112,9 @@ The normal sequence status is:
 #### TODO List
 
 - Application definition :heavy_check_mark:
-- Create basic project structure: :x:
-- Implement Register new order :x:
-- Implement Update order status :x:
+- Create basic project structure: :heavy_check_mark:
+- Implement Create new order :heavy_check_mark:
+- Implement Update order status :heavy_check_mark:
+- Implement Cancel order :X:
 - Implement Check order status :x:
 - Dockerization :x:
