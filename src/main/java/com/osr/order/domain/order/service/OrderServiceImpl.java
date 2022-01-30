@@ -1,7 +1,9 @@
 package com.osr.order.domain.order.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import com.osr.order.domain.order.Address;
 import com.osr.order.domain.order.Order;
@@ -51,12 +53,14 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 	public void cancelOrder(UUID orderId) {
+		Order order = findById(orderId);
 		
+		order.changeStatusToCancelled();
 		
+		orderRepository.save(order);
 	}
-
-	@Override
-	public Order findById(UUID orderId) {
+	
+	private Order findById(UUID orderId) {
 		if(orderIdIsNull(orderId)) {
 			throw new OrderServiceException("The order identifier must be informed");
 		}
@@ -66,6 +70,25 @@ public class OrderServiceImpl implements OrderService {
 	
 	private boolean orderIdIsNull(UUID orderId) {
 		return orderId == null;
+	}
+
+	@Override
+	public Order checkStatus(UUID orderId) {
+		Order order = findById(orderId);
+		
+		if(modifiedOrderIsOverThanFiveMinutes(order)) {
+			order.changeToNextStatus();
+		}
+		
+		orderRepository.save(order);
+		
+		return order;
+	}
+	
+	private boolean modifiedOrderIsOverThanFiveMinutes(Order order) {
+		long durantion = new Date().getTime() - order.getModified().getTime();
+		
+		return TimeUnit.MILLISECONDS.toMinutes(durantion) > 5;
 	}
 	
 }

@@ -1,14 +1,17 @@
-package com.osr.order.domain.service;
+package com.osr.order.domain.order.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,9 +29,6 @@ import com.osr.order.domain.order.Money;
 import com.osr.order.domain.order.Order;
 import com.osr.order.domain.order.OrderItem;
 import com.osr.order.domain.order.repository.OrderRepository;
-import com.osr.order.domain.order.service.OrderService;
-import com.osr.order.domain.order.service.OrderServiceException;
-import com.osr.order.domain.order.service.OrderServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -47,14 +47,14 @@ public class OrderServiceTest {
 	}
 	
 	@Test
-	public void createOrderWihoutOrderItemsShouldThrowsIllegalArgumentException() {
+	public void createOrderWihoutOrderItemsShouldThrowsOrderServicetException() {
 		assertThrows(OrderServiceException.class, () -> {
 			orderService.createOrder(Order.PaymentMethod.CASH, createAddress(), null);
 		});
 	}
 	
 	@Test
-	public void createOrderWithoutPaymentMethodShouldThrowsIllegalArgumentException() {
+	public void createOrderWithoutPaymentMethodShouldThrowsOrderServiceException() {
 		assertThrows(OrderServiceException.class, () -> {
 			orderService.createOrder(null, createAddress(), createOrderItemsList());
 		});
@@ -131,6 +131,62 @@ public class OrderServiceTest {
 		createOrderItemsList().forEach(orderItem -> order.addOrderItem(orderItem));
 		
 		return order;
+	}
+	
+	@Test
+	public void whenCancelOrderItsStatusShouldBeCancelled() {
+		Order order = createOrder();
+		
+		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		
+		orderService.cancelOrder(order.getId());
+		
+		verify(orderRepository).save(orderArgumentCaptor.capture());
+		Order savedOrder = orderArgumentCaptor.getValue();
+		
+		assertEquals(Order.OrderStatus.CANCELLED, savedOrder.getStatus());
+	}
+	
+	@Test
+	public void whenCancelOrderItsModifiedDateShouldBeAfterThanPreviousModififedDate() {
+		Order order = createOrder();
+		
+		Date previousModifiedDate = order.getModified();
+		
+		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		
+		orderService.cancelOrder(order.getId());
+		
+		verify(orderRepository).save(orderArgumentCaptor.capture());
+		Order savedOrder = orderArgumentCaptor.getValue();
+		Date newModifiedDAte = savedOrder.getModified();
+		
+		assertTrue(newModifiedDAte.after(previousModifiedDate));
+	}
+	
+	@Test
+	public void checkOrderStatusOfNullIdShouldThrowsOrderServiceException() {
+		assertThrows(OrderServiceException.class, () -> {
+			orderService.checkStatus(null);
+		});
+	}
+	
+	@Test
+	public void whenCheckStatusIfModifiedDateIsOver5MinutesTheStatusShouldBeUpdatedToNextStatus() {
+		Order order = mock(Order.class);
+		
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(new Date());
+		calendar.add(Calendar.MINUTE, -6);
+		
+		when(order.getId()).thenReturn(UUID.randomUUID());
+		when(order.getStatus()).thenReturn(Order.OrderStatus.HEARD).thenReturn(Order.OrderStatus.COOKINGN);
+		when(order.getModified()).thenReturn(calendar.getTime());
+		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		
+		Order orderChecked = orderService.checkStatus(order.getId());
+		
+		assertEquals(order.getStatus().next(), orderChecked.getStatus());
 	}
 	
 }

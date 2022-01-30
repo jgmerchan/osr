@@ -74,6 +74,7 @@ public class Order {
 	}
 	
 	public void changeStatusToCancelled() {
+		this.modified = new Date();
 		this.status = OrderStatus.CANCELLED;
 	}
 	

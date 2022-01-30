@@ -14,5 +14,5 @@ public interface OrderService {
 	
 	void cancelOrder(UUID orderId);
 	
-	Order findById(UUID orderId);
+	Order checkStatus(UUID orderId);
 }
