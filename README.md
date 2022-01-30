@@ -34,8 +34,15 @@ This is an ordering System for restaurants. In this application you can:
 
 ```javascript
 {
-  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454",
-  "status":"Cooking"
+  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454"
+}
+```
+
+- Cancel order PUT request `/api/order/cancel`. They payload will be:
+
+```javascript
+{
+  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454"
 }
 ```
 
