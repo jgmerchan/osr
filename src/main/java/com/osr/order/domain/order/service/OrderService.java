@@ -8,11 +8,13 @@ import com.osr.order.domain.order.Order;
 import com.osr.order.domain.order.OrderItem;
 
 public interface OrderService {
-	void createOrder(Order.PaymentMethod paymentMethod, Address addres, List<OrderItem> orderItems);
+	UUID createOrder(Order.PaymentMethod paymentMethod, Address addres, List<OrderItem> orderItems);
 	
-	void changeNextStatusOrder(UUID orderId);
+	Order changeNextStatusOrder(UUID orderId);
 	
 	void cancelOrder(UUID orderId);
 	
 	Order checkStatus(UUID orderId);
+	
+	Order getOrderById(UUID orderId);
 }

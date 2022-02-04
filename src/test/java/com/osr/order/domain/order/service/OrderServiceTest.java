@@ -27,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.osr.order.domain.order.Address;
 import com.osr.order.domain.order.Money;
 import com.osr.order.domain.order.Order;
+import com.osr.order.domain.order.OrderId;
 import com.osr.order.domain.order.OrderItem;
 import com.osr.order.domain.order.repository.OrderRepository;
 
@@ -62,11 +63,12 @@ public class OrderServiceTest {
 	
 	@Test
 	public void createdOrderShouldHaveHeadrStatus() {
-		orderService.createOrder(Order.PaymentMethod.CASH, createAddress(), createOrderItemsList());
+		UUID orderUuid = orderService.createOrder(Order.PaymentMethod.CASH, createAddress(), createOrderItemsList());
 		
 		verify(orderRepository).save(orderArgumentCaptor.capture());
 		Order savedOrder = orderArgumentCaptor.getValue();
 		
+		assertTrue(orderUuid != null);
 		assertEquals(Order.OrderStatus.HEARD, savedOrder.getStatus());
 		
 	}
@@ -98,14 +100,11 @@ public class OrderServiceTest {
 	public void updateOrderStatusInHeardOrderShouldBeCooking() {
 		Order order = createOrder();
 		
-		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
 		
-		orderService.changeNextStatusOrder(order.getId());
+		Order savedOrder = orderService.changeNextStatusOrder(order.getOrderId().getId());
 		
-		verify(orderRepository).save(orderArgumentCaptor.capture());
-		Order savedOrder = orderArgumentCaptor.getValue();
-		
-		assertEquals(Order.OrderStatus.COOKINGN, savedOrder.getStatus());
+		assertEquals(Order.OrderStatus.COOKING, savedOrder.getStatus());
 	}
 	
 	@Test
@@ -114,12 +113,10 @@ public class OrderServiceTest {
 		
 		Date previousModifiedDate = order.getModified();
 		
-		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
 		
-		orderService.changeNextStatusOrder(order.getId());
+		Order savedOrder = orderService.changeNextStatusOrder(order.getOrderId().getId());
 		
-		verify(orderRepository).save(orderArgumentCaptor.capture());
-		Order savedOrder = orderArgumentCaptor.getValue();
 		Date newModifiedDAte = savedOrder.getModified();
 		
 		assertTrue(newModifiedDAte.after(previousModifiedDate));
@@ -137,27 +134,29 @@ public class OrderServiceTest {
 	public void whenCancelOrderItsStatusShouldBeCancelled() {
 		Order order = createOrder();
 		
-		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
 		
-		orderService.cancelOrder(order.getId());
+		orderService.cancelOrder(order.getOrderId().getId());
 		
-		verify(orderRepository).save(orderArgumentCaptor.capture());
+		verify(orderRepository).update(orderArgumentCaptor.capture());
 		Order savedOrder = orderArgumentCaptor.getValue();
 		
 		assertEquals(Order.OrderStatus.CANCELLED, savedOrder.getStatus());
 	}
 	
 	@Test
-	public void whenCancelOrderItsModifiedDateShouldBeAfterThanPreviousModififedDate() {
+	public void whenCancelOrderItsModifiedDateShouldBeAfterThanPreviousModififedDate() throws InterruptedException {
 		Order order = createOrder();
 		
 		Date previousModifiedDate = order.getModified();
 		
-		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
 		
-		orderService.cancelOrder(order.getId());
+		Thread.sleep(100);
 		
-		verify(orderRepository).save(orderArgumentCaptor.capture());
+		orderService.cancelOrder(order.getOrderId().getId());
+		
+		verify(orderRepository).update(orderArgumentCaptor.capture());
 		Order savedOrder = orderArgumentCaptor.getValue();
 		Date newModifiedDAte = savedOrder.getModified();
 		
@@ -179,12 +178,12 @@ public class OrderServiceTest {
 		calendar.setTime(new Date());
 		calendar.add(Calendar.MINUTE, -6);
 		
-		when(order.getId()).thenReturn(UUID.randomUUID());
-		when(order.getStatus()).thenReturn(Order.OrderStatus.HEARD).thenReturn(Order.OrderStatus.COOKINGN);
+		when(order.getOrderId()).thenReturn(new OrderId(UUID.randomUUID()));
+		when(order.getStatus()).thenReturn(Order.OrderStatus.HEARD).thenReturn(Order.OrderStatus.COOKING);
 		when(order.getModified()).thenReturn(calendar.getTime());
-		when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+		when(orderRepository.findById(order.getOrderId())).thenReturn(Optional.of(order));
 		
-		Order orderChecked = orderService.checkStatus(order.getId());
+		Order orderChecked = orderService.checkStatus(order.getOrderId().getId());
 		
 		assertEquals(order.getStatus().next(), orderChecked.getStatus());
 	}

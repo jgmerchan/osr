@@ -9,15 +9,15 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Getter
-public class OrderId {
+public class OrderItemId {
 
-	private UUID id;
+private UUID id;
 	
-	public OrderId() {
+	public OrderItemId() {
 		this.id = UUID.randomUUID();
 	}
 	
-	public OrderId(UUID id) {
+	public OrderItemId(UUID id) {
 		this.id = id;
 	}
 }

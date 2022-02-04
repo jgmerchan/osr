@@ -30,12 +30,12 @@ public class OrderTest {
 	
 	@Test
 	public void nextStatusToHeardShouldBeCooking() {
-		assertEquals(Order.OrderStatus.COOKINGN, Order.OrderStatus.HEARD.next());
+		assertEquals(Order.OrderStatus.COOKING, Order.OrderStatus.HEARD.next());
 	}
 
 	@Test
 	public void nextStatusToCookingShouldBeOnTheWay() {
-		assertEquals(Order.OrderStatus.ON_THE_WAY, Order.OrderStatus.COOKINGN.next());
+		assertEquals(Order.OrderStatus.ON_THE_WAY, Order.OrderStatus.COOKING.next());
 	}
 
 	@Test

@@ -5,7 +5,9 @@ import java.util.Currency;
 import java.util.Locale;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@Getter
 @EqualsAndHashCode
 public class Money {
 
@@ -39,10 +41,6 @@ public class Money {
 
 	public Money(String currency) {
 		this(DEFAULT_VALUE, currency);
-	}
-	
-	public BigDecimal getValue() {
-		return this.value;
 	}
 
 	public Money add(Money money) {

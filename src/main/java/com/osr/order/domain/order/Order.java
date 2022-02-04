@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 public class Order {
 
-	private UUID id;
+	private OrderId orderId;
 	private OrderStatus status;
 	private PaymentMethod paymentMethod;
 	private Date date;
@@ -24,7 +24,7 @@ public class Order {
 	
 	public enum OrderStatus {
 		HEARD, 
-		COOKINGN, 
+		COOKING, 
 		ON_THE_WAY, 
 		ENJOY_YOUR_MEAL, 
 		CANCELLED;
@@ -49,7 +49,7 @@ public class Order {
 
 
 	public Order(PaymentMethod paymentMethod, Address addres) {
-		this.id = UUID.randomUUID();
+		this.orderId = new OrderId();
 		this.status = OrderStatus.HEARD;
 		this.paymentMethod = paymentMethod;
 		this.date = new Date();
@@ -58,8 +58,18 @@ public class Order {
 		this.orderItems = new ArrayList<>();
 	}
 	
+	public Order(UUID id, OrderStatus status, PaymentMethod paymentMethod, Date date, Date modified, Address addres) {
+		this.orderId = new OrderId(id);
+		this.status = status;
+		this.paymentMethod = paymentMethod;
+		this.date = date;
+		this.modified = modified;
+		this.addres = addres;
+		this.orderItems = new ArrayList<>();
+	}
+	
 	public void addOrderItem(OrderItem orderItem) {
-		this.orderItems.add(orderItem);
+		this.orderItems.add(new OrderItem(this.orderId, orderItem.getProductId(), orderItem.getDescription(), orderItem.getUnitPrice(), orderItem.getQuantity()));
 	}
 
 	public float calculateTotalPrice() {
