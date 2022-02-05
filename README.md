@@ -1,6 +1,10 @@
 # Ordering System for Restaurants (OSR)
 
-This is an ordering System for restaurants.
+This is an ordering System for Restaurants.
+
+To **run** the project, execute from the console: `mvn clean spring-boot:run`
+
+To run the **test** project, execute from the console: `mvn clean test`
 
 ### Business Logic
 
