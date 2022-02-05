@@ -8,7 +8,7 @@ To run the **test** project, execute from the console: `mvn clean test`
 
 ### Business Logic
 
-Possible orders status:
+Possible order status:
 - `Heard`
 - `Cooking`
 - `On the way`
@@ -22,11 +22,11 @@ The normal sequence status is:
 4. `Enjoy your meal`
 
 ##### Business Rules
-* When an order is create is set by default whit `Heard` status
+* When an order is create is set by default with `Heard` status
 
 * When the status is checked, if the last time that status has change is over than 5 minutes, order status will change automatically to the next status in the sequence
 
-* `Cancelled` status only can set by the update status action
+* `Cancelled` status only can set by the cancel status action
 
 
 ### Concepts used
@@ -37,7 +37,7 @@ The normal sequence status is:
 
 ### Operations
 
-- Register new order by a POST request `/api/order`.
+- Create a new order by a POST request `/api/order`.
 
 The payload will be:
 
