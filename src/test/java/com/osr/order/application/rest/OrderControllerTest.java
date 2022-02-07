@@ -39,7 +39,7 @@ import com.osr.order.domain.order.Order;
 import com.osr.order.domain.order.Order.PaymentMethod;
 import com.osr.order.domain.order.OrderItem;
 import com.osr.order.domain.order.service.OrderService;
-import com.osr.order.infrastucture.rest.OrderController;
+import com.osr.order.infrastructure.rest.OrderController;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
