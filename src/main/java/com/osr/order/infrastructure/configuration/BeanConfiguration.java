@@ -1,4 +1,4 @@
-package com.osr.order.insfrastucture.configuration;
+package com.osr.order.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.osr.order.insfrastucture.repository;
+package com.osr.order.infrastructure.repository;
 
 import java.util.UUID;
 
