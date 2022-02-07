@@ -1,4 +1,4 @@
-package com.osr.order.infrastructure.repository;
+package com.osr.order.infrastructure.repository.entities;
 
 import java.util.Date;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.osr.order.infrastructure.repository;
+package com.osr.order.infrastructure.repository.entities;
 
 import java.math.BigDecimal;
 import java.util.UUID;
