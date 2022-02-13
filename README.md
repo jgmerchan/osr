@@ -94,6 +94,7 @@ The response will be:
 - Cancel order PUT request `/api/order/{oderId}/status?cancel=true`
 
 The response will be:
+
 ```javascript
 {
     "id": "48857724-ed24-462c-b1d0-ae2bf8a4be7c",
@@ -102,15 +103,6 @@ The response will be:
 ```
 
 - Check order status by a GET request `/api/order/{orderId}/status`.
-
-The payload will be:
-
-```javascript
-{
-    "id": "48857724-ed24-462c-b1d0-ae2bf8a4be7c",
-    "status": "CANCELLED"
-}
-```
 
 The response will be:
 
@@ -122,14 +114,6 @@ The response will be:
 ```
 
 - Get order by a GET request `/api/order/{orderId}`.
-
-The payload will be:
-
-```javascript
-{
-  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454"
-}
-```
 
 The response will be:
 
