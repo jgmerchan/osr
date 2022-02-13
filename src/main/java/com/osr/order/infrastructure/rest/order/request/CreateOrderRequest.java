@@ -1,4 +1,4 @@
-package com.osr.order.application.request;
+package com.osr.order.infrastructure.rest.order.request;
 
 import java.util.List;
 

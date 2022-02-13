@@ -1,4 +1,4 @@
-package com.osr.order.application.response;
+package com.osr.order.infrastructure.rest.order.response;
 
 import java.util.UUID;
 

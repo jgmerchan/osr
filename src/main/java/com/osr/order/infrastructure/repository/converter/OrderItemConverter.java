@@ -7,7 +7,7 @@ import com.osr.order.infrastructure.repository.entities.OrderItemEntity;
 
 public class OrderItemConverter {
 
-	public static OrderItem toDomain(OrderItemEntity orderItemEntity) {
+	public OrderItem toDomain(OrderItemEntity orderItemEntity) {
 		return new OrderItem(orderItemEntity.getId(), 
 				orderItemEntity.getProductId(), 
 				orderItemEntity.getDescription(),
@@ -18,7 +18,7 @@ public class OrderItemConverter {
 				orderItemEntity.getQuantity());
 	}
 
-	public static OrderItemEntity toEntity(OrderItem orderItem, OrderId orderId, boolean isNew) {
+	public OrderItemEntity toEntity(OrderItem orderItem, OrderId orderId, boolean isNew) {
 		return new OrderItemEntity(orderItem.getOrderItemId().getId(), 
 				orderId.getId(), 
 				orderItem.getProductId(),

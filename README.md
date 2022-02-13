@@ -80,15 +80,7 @@ The response will be:
 }
 ```
 
-- Update order status by a PUT request `/api/order`.
-
-They payload will be:
-
-```javascript
-{
-  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454"
-}
-```
+- Update order status by a PUT request `/api/order/{orderId}/status`
 
 The response will be:
 
@@ -99,25 +91,24 @@ The response will be:
 }
 ```
 
-- Cancel order PUT request `/api/order/cancel`
+- Cancel order PUT request `/api/order/{oderId}/status?cancel=true`
 
-They payload will be:
-
+The response will be:
 ```javascript
 {
-  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454"
+    "id": "48857724-ed24-462c-b1d0-ae2bf8a4be7c",
+    "status": "CANCELLED"
 }
 ```
 
-The response will be a 200 HTTP Status
-
-- Check order status by a GET request `/api/order/status`.
+- Check order status by a GET request `/api/order/{orderId}/status`.
 
 The payload will be:
 
 ```javascript
 {
-  "id":"f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454"
+    "id": "48857724-ed24-462c-b1d0-ae2bf8a4be7c",
+    "status": "CANCELLED"
 }
 ```
 
@@ -130,7 +121,7 @@ The response will be:
 }
 ```
 
-- Get order by a GET request `/api/order/`.
+- Get order by a GET request `/api/order/{orderId}`.
 
 The payload will be:
 
@@ -146,12 +137,12 @@ The response will be:
 {
     "order": {
         "orderId": {
-            "id": "d3449b20-8615-4c26-92d8-d8ff20b7aaca"
+            "id": "48857724-ed24-462c-b1d0-ae2bf8a4be7c"
         },
-        "status": "HEARD",
+        "status": "CANCELLED",
         "paymentMethod": "PAYPAL",
-        "date": "2022-02-04T13:58:23.716+00:00",
-        "modified": "2022-02-04T13:58:23.716+00:00",
+        "date": "2022-02-13T15:49:29.355+00:00",
+        "modified": "2022-02-13T15:51:13.081+00:00",
         "addres": {
             "address": "Av. Puerta de Hierro, s/n",
             "city": "Madrid",
@@ -160,10 +151,10 @@ The response will be:
         "orderItems": [
             {
                 "orderItemId": {
-                    "id": "8eb801c6-0dfa-4ab9-a0b2-4f6367153322"
+                    "id": "3960b919-3e3f-4198-9904-66e2528fc0c2"
                 },
                 "orderId": {
-                    "id": "d3449b20-8615-4c26-92d8-d8ff20b7aaca"
+                    "id": "48857724-ed24-462c-b1d0-ae2bf8a4be7c"
                 },
                 "productId": "31edab93-84c0-48fc-866a-702fc984dc0a",
                 "description": "Tortilla de patata",
@@ -175,10 +166,10 @@ The response will be:
             },
             {
                 "orderItemId": {
-                    "id": "4b7d3801-7231-44cf-8c17-86b5468a348b"
+                    "id": "f3f6e91e-f121-4057-ab76-883b3bafbe0d"
                 },
                 "orderId": {
-                    "id": "d3449b20-8615-4c26-92d8-d8ff20b7aaca"
+                    "id": "48857724-ed24-462c-b1d0-ae2bf8a4be7c"
                 },
                 "productId": "9e3b6d9b-7ff0-443f-940e-f1c9cd34fa3e",
                 "description": "Paella",

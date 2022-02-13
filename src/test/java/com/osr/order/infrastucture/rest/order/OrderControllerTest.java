@@ -1,4 +1,4 @@
-package com.osr.order.application.rest;
+package com.osr.order.infrastucture.rest.order;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -24,22 +23,21 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.osr.order.application.request.CancelOrderRequest;
-import com.osr.order.application.request.CheckOrderStatusRequest;
-import com.osr.order.application.request.CreateOrderRequest;
-import com.osr.order.application.request.GetOrderRequest;
-import com.osr.order.application.request.UpdateOrderRequest;
-import com.osr.order.application.response.CheckOrderStatusResponse;
-import com.osr.order.application.response.CreateOrderResponse;
-import com.osr.order.application.response.GetOrderResponse;
-import com.osr.order.application.response.UpdateOrderResponse;
+import com.osr.order.application.usescases.order.CheckOrderStatusUseCase;
+import com.osr.order.application.usescases.order.CreateOrderUseCase;
+import com.osr.order.application.usescases.order.GetOrderUseCase;
+import com.osr.order.application.usescases.order.UpdateOrderStatusUseCase;
 import com.osr.order.domain.order.Address;
 import com.osr.order.domain.order.Money;
 import com.osr.order.domain.order.Order;
 import com.osr.order.domain.order.Order.PaymentMethod;
 import com.osr.order.domain.order.OrderItem;
-import com.osr.order.domain.order.service.OrderService;
-import com.osr.order.infrastructure.rest.OrderController;
+import com.osr.order.infrastructure.rest.order.OrderController;
+import com.osr.order.infrastructure.rest.order.request.CreateOrderRequest;
+import com.osr.order.infrastructure.rest.order.response.CheckOrderStatusResponse;
+import com.osr.order.infrastructure.rest.order.response.CreateOrderResponse;
+import com.osr.order.infrastructure.rest.order.response.GetOrderResponse;
+import com.osr.order.infrastructure.rest.order.response.UpdateOrderResponse;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
@@ -47,7 +45,16 @@ import com.osr.order.infrastructure.rest.OrderController;
 public class OrderControllerTest {
 
 	@MockBean
-	private OrderService orderService;
+	private CreateOrderUseCase createOrderUseCase;
+	
+	@MockBean
+	private GetOrderUseCase getOrderUseCase;
+	
+	@MockBean
+	private UpdateOrderStatusUseCase updateOrderStatusUseCase;
+	
+	@MockBean
+	private CheckOrderStatusUseCase checkOrderStatusUseCase;
 
 	@Autowired
 	private MockMvc mvc;
@@ -59,22 +66,10 @@ public class OrderControllerTest {
 	private JacksonTester<CreateOrderResponse> jsonRequestCreateResponse;
 
 	@Autowired
-	private JacksonTester<UpdateOrderRequest> jsonRequestUpdateOrder;
-
-	@Autowired
 	private JacksonTester<UpdateOrderResponse> jsonOrderResponse;
 
 	@Autowired
-	private JacksonTester<CancelOrderRequest> jsonCancelOrderRequest;
-
-	@Autowired
-	private JacksonTester<CheckOrderStatusRequest> jsonCheckOrderStatusRequest;
-
-	@Autowired
 	private JacksonTester<CheckOrderStatusResponse> jsonCheckOrderStatusResponse;
-
-	@Autowired
-	private JacksonTester<GetOrderRequest> jsonGetOrderRequest;
 
 	@Autowired
 	private JacksonTester<GetOrderResponse> jsonGetOrderResponse;
@@ -84,7 +79,7 @@ public class OrderControllerTest {
 		CreateOrderRequest orderRequest = createOrderRequest(PaymentMethod.PAYPAL);
 		CreateOrderResponse orderResponse = new CreateOrderResponse(UUID.randomUUID());
 
-		when(orderService.createOrder(orderRequest.getPaymentMethod(), orderRequest.getAddres(),
+		when(createOrderUseCase.createOrder(orderRequest.getPaymentMethod(), orderRequest.getAddres(),
 				orderRequest.getOrderItems())).thenReturn(orderResponse.getId());
 
 		MockHttpServletResponse response = mvc.perform(post("/api/order").contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -116,16 +111,13 @@ public class OrderControllerTest {
 	}
 
 	@Test
-	public void whenUpdateOrderWithCorrectPaloadShouldRespond200() throws IOException, Exception {
+	public void whenUpdateOrderWithCorrectPaloadShouldRespond200() throws Exception {
 		Order order = new Order(PaymentMethod.PAYPAL, new Address("Av. Puerta de Hierro, s/n", "Madrid", "28071"));
 
-		UpdateOrderRequest updateOrderRequest = new UpdateOrderRequest(order.getOrderId().getId());
-
-		when(orderService.changeNextStatusOrder(updateOrderRequest.getId())).thenReturn(order);
+		when(updateOrderStatusUseCase.changeNextStatusOrder(order.getOrderId().getId())).thenReturn(order);
 
 		MockHttpServletResponse response = mvc.perform(
-				put("/api/order").contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON_VALUE)
-						.content(jsonRequestUpdateOrder.write(updateOrderRequest).getJson()))
+				put("/api/order/" + order.getOrderId().getId().toString() + "/status").contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON_VALUE))
 				.andReturn().getResponse();
 
 		UpdateOrderResponse updateOrderResponse = new UpdateOrderResponse(order.getOrderId().getId(),
@@ -136,30 +128,35 @@ public class OrderControllerTest {
 	}
 
 	@Test
-	public void whenCancelWithCorrectPaloadShouldRespond200() throws IOException, Exception {
-		CancelOrderRequest calcelOrderRequest = new CancelOrderRequest(UUID.randomUUID());
-
-		MockHttpServletResponse response = mvc.perform(put("/api/order/cancel")
+	public void whenCancelWithCorrectPaloadShouldRespond200() throws Exception {
+		Order order = new Order(PaymentMethod.PAYPAL, new Address("Av. Puerta de Hierro, s/n", "Madrid", "28071"));
+		
+		when(updateOrderStatusUseCase.cancelOrder(order.getOrderId().getId())).thenReturn(order);
+		
+		MockHttpServletResponse response = mvc.perform(put("/api/order/" + order.getOrderId().getId().toString() + "/status?cancel=true")
 				.contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON_VALUE)
-				.content(jsonCancelOrderRequest.write(calcelOrderRequest).getJson())).andReturn().getResponse();
+				).andReturn().getResponse();
+		
+		UpdateOrderResponse updateOrderResponse = new UpdateOrderResponse(order.getOrderId().getId(),
+				order.getStatus());
 
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		assertEquals(jsonOrderResponse.write(updateOrderResponse).getJson(), response.getContentAsString());
 	}
 
 	@Test
-	public void whenCheckStatusWithCorrectPayLoadShouldRespond200() throws IOException, Exception {
+	public void whenCheckStatusWithCorrectPayLoadShouldRespond200() throws Exception {
 		Order order = new Order(PaymentMethod.PAYPAL, new Address("Av. Puerta de Hierro, s/n", "Madrid", "28071"));
 
-		CheckOrderStatusRequest checkOrderStatusRequest = new CheckOrderStatusRequest(order.getOrderId().getId());
 		CheckOrderStatusResponse checkOrderStatusResponse = new CheckOrderStatusResponse(order.getOrderId().getId(),
 				order.getStatus());
 
-		when(orderService.checkStatus(order.getOrderId().getId())).thenReturn(order);
+		when(checkOrderStatusUseCase.checkOrderStatus(order.getOrderId().getId())).thenReturn(order);
 
 		MockHttpServletResponse response = mvc
-				.perform(get("/api/order/status").contentType(MediaType.APPLICATION_JSON_VALUE)
+				.perform(get("/api/order/"  + order.getOrderId().getId().toString() + "/status").contentType(MediaType.APPLICATION_JSON_VALUE)
 						.accept(MediaType.APPLICATION_JSON_VALUE)
-						.content(jsonCheckOrderStatusRequest.write(checkOrderStatusRequest).getJson()))
+						)
 				.andReturn().getResponse();
 
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
@@ -168,16 +165,15 @@ public class OrderControllerTest {
 	}
 
 	@Test
-	public void whenGetOrderWithCorrectOrderIdShouldRespond200() throws IOException, Exception {
+	public void whenGetOrderWithCorrectOrderIdShouldRespond200() throws Exception {
 		Order order = new Order(PaymentMethod.PAYPAL, new Address("Av. Puerta de Hierro, s/n", "Madrid", "28071"));
 
-		GetOrderRequest getOrderRequest = new GetOrderRequest(order.getOrderId().getId());
 		GetOrderResponse getOrderResponse = new GetOrderResponse(order);
 
-		when(orderService.getOrderById(order.getOrderId().getId())).thenReturn(order);
+		when(getOrderUseCase.getOrderById(order.getOrderId().getId())).thenReturn(order);
 
-		MockHttpServletResponse response = mvc.perform(get("/api/order").contentType(MediaType.APPLICATION_JSON_VALUE)
-				.accept(MediaType.APPLICATION_JSON_VALUE).content(jsonGetOrderRequest.write(getOrderRequest).getJson()))
+		MockHttpServletResponse response = mvc.perform(get("/api/order/" + order.getOrderId().getId().toString()).contentType(MediaType.APPLICATION_JSON_VALUE)
+				.accept(MediaType.APPLICATION_JSON_VALUE))
 				.andReturn().getResponse();
 
 		assertEquals(HttpStatus.OK.value(), response.getStatus());

@@ -69,13 +69,17 @@ public class Order {
 	}
 	
 	public void addOrderItem(OrderItem orderItem) {
-		this.orderItems.add(new OrderItem(this.orderId, orderItem.getProductId(), orderItem.getDescription(), orderItem.getUnitPrice(), orderItem.getQuantity()));
+		this.orderItems.add(new OrderItem(this.orderId,
+				orderItem.getProductId(),
+				orderItem.getDescription(),
+				orderItem.getUnitPrice(),
+				orderItem.getQuantity()));
 	}
 
 	public float calculateTotalPrice() {
 		return orderItems.stream()
 				.map(orderItem -> orderItem.getUnitPrice().getValue().floatValue())
-				.reduce(Float::sum).get();
+				.reduce(Float::sum).orElse(0f);
 	}
 	
 	public void changeToNextStatus() {
