@@ -14,13 +14,13 @@ import lombok.ToString;
 @Getter
 public class Order {
 
-	private OrderId orderId;
+	private final OrderId orderId;
 	private OrderStatus status;
-	private PaymentMethod paymentMethod;
-	private Date date;
+	private final PaymentMethod paymentMethod;
+	private final Date date;
 	private Date modified;
-	private Address addres;
-	private List<OrderItem> orderItems;
+	private final Address address;
+	private final List<OrderItem> orderItems;
 	
 	public enum OrderStatus {
 		HEARD, 
@@ -29,7 +29,7 @@ public class Order {
 		ENJOY_YOUR_MEAL, 
 		CANCELLED;
 
-		private static OrderStatus[] values = values();
+		private static final OrderStatus[] values = values();
 
 		public OrderStatus next() {
 			if (this.equals(OrderStatus.ENJOY_YOUR_MEAL) || this.equals(OrderStatus.CANCELLED)) {
@@ -48,23 +48,23 @@ public class Order {
 	}
 
 
-	public Order(PaymentMethod paymentMethod, Address addres) {
+	public Order(PaymentMethod paymentMethod, Address address) {
 		this.orderId = new OrderId();
 		this.status = OrderStatus.HEARD;
 		this.paymentMethod = paymentMethod;
 		this.date = new Date();
 		this.modified = new Date();
-		this.addres = addres;
+		this.address = address;
 		this.orderItems = new ArrayList<>();
 	}
 	
-	public Order(UUID id, OrderStatus status, PaymentMethod paymentMethod, Date date, Date modified, Address addres) {
+	public Order(UUID id, OrderStatus status, PaymentMethod paymentMethod, Date date, Date modified, Address address) {
 		this.orderId = new OrderId(id);
 		this.status = status;
 		this.paymentMethod = paymentMethod;
 		this.date = date;
 		this.modified = modified;
-		this.addres = addres;
+		this.address = address;
 		this.orderItems = new ArrayList<>();
 	}
 	

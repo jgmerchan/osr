@@ -66,7 +66,7 @@ public class OrderController {
 	}
 
 	@ExceptionHandler({OrderIdDoesNotExistsException.class, ParameterNotFoundException.class})
-	public ResponseEntity<?> handleExcepction(Exception ex) {
+	public ResponseEntity<?> handleException(Exception ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 

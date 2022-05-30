@@ -44,9 +44,9 @@ public class OrderConverter {
 				order.getStatus().toString(),
 				order.getPaymentMethod().toString(), 
 				order.getDate(), order.getModified(),
-				order.getAddres().getAddress(), 
-				order.getAddres().getCity(), 
-				order.getAddres().getZipCode(),
+				order.getAddress().getAddress(),
+				order.getAddress().getCity(),
+				order.getAddress().getZipCode(),
 				orderItemsEntity, isNew);
 	}
 	

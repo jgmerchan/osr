@@ -39,7 +39,7 @@ public class OrderTest {
 	}
 
 	@Test
-	public void nextSatusToOnTheWayShouldBeEnjoyYourMeal() {
+	public void nextStatusToOnTheWayShouldBeEnjoyYourMeal() {
 		assertEquals(Order.OrderStatus.ENJOY_YOUR_MEAL, Order.OrderStatus.ON_THE_WAY.next());
 	}
 	

@@ -15,7 +15,7 @@ public class CreateOrderUseCase {
 
     private final OrderRepository orderRepository;
 
-    public UUID createOrder(Order.PaymentMethod paymentMethod, Address addres, List<OrderItem> orderItems)
+    public UUID createOrder(Order.PaymentMethod paymentMethod, Address address, List<OrderItem> orderItems)
             throws ParameterNotFoundException {
         if (hasNotOrderItems(orderItems)) {
             throw new ParameterNotFoundException("order item");
@@ -25,7 +25,7 @@ public class CreateOrderUseCase {
             throw new ParameterNotFoundException("payment method");
         }
 
-        Order order = new Order(paymentMethod, addres);
+        Order order = new Order(paymentMethod, address);
 
         orderItems.forEach(order::addOrderItem);
 
